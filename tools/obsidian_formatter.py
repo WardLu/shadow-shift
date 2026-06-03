@@ -297,20 +297,35 @@ class LinkConverter:
     def __init__(self, vault_path: str):
         self.vault_path = Path(vault_path)
 
-    def convert_file(self, file_path: str) -> bool:
-        """转换单个文件"""
+    def convert_file(self, file_path: str) -> Tuple[bool, int, int]:
+        """
+        转换单个文件
+
+        Returns:
+            (是否修改, 文档链接转换数, 图片链接转换数)
+        """
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
 
         original_content = content
+        md_links_converted = 0
+        img_links_converted = 0
 
-        def replace_link(match):
+        # 1. 转换文档链接 [text](path.md)
+        def replace_doc_link(match):
+            nonlocal md_links_converted
             text = match.group(1)
             path = match.group(2)
+
+            # 跳过外部链接
+            if path.startswith('http://') or path.startswith('https://'):
+                return match.group(0)
 
             filename = os.path.basename(path)
             if filename.endswith('.md'):
                 filename = filename[:-3]
+
+            md_links_converted += 1
 
             if filename in text or text == filename:
                 return f"[[{filename}]]"
@@ -318,13 +333,65 @@ class LinkConverter:
                 return f"[[{filename}|{text}]]"
 
         pattern = r'\[([^\]]+)\]\(([^)]+\.md)\)'
-        content = re.sub(pattern, replace_link, content)
+        content = re.sub(pattern, replace_doc_link, content)
 
+        # 2. 转换图片链接 ![alt](path)
+        def replace_image_link(match):
+            nonlocal img_links_converted
+            alt_text = match.group(1)
+            path = match.group(2)
+
+            # 跳过外部链接
+            if path.startswith('http://') or path.startswith('https://'):
+                return match.group(0)
+
+            # 提取图片文件名
+            image_name = os.path.basename(path)
+
+            img_links_converted += 1
+
+            # 如果有 alt text 且不等于文件名，保留它
+            if alt_text and alt_text != image_name:
+                return f"![[{image_name}|{alt_text}]]"
+            else:
+                return f"![[{image_name}]]"
+
+        # 匹配 ![alt](path) 格式
+        img_pattern = r'!\[([^\]]*)\]\(([^)]+)\)'
+        content = re.sub(img_pattern, replace_image_link, content)
+
+        # 3. 转换其他附件链接（PDF 等）
+        def replace_attachment_link(match):
+            nonlocal md_links_converted
+            text = match.group(1)
+            path = match.group(2)
+
+            # 跳过外部链接
+            if path.startswith('http://') or path.startswith('https://'):
+                return match.group(0)
+
+            # 提取文件名
+            filename = os.path.basename(path)
+
+            md_links_converted += 1
+
+            # 如果文本和文件名相同，省略显示文本
+            if text == filename or not text:
+                return f"[[{filename}]]"
+            else:
+                return f"[[{filename}|{text}]]"
+
+        # 匹配 [text](path.pdf) 等附件链接（排除 .md 和图片）
+        attachment_pattern = r'\[([^\]]+)\]\(([^)]+\.(pdf|docx?|xlsx?|pptx?|zip|rar|7z|xmind|mp[34]|mov|avi|wav|flac))\)'
+        content = re.sub(attachment_pattern, replace_attachment_link, content, flags=re.IGNORECASE)
+
+        # 如果有修改，保存文件
         if content != original_content:
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(content)
-            return True
-        return False
+            return True, md_links_converted, img_links_converted
+
+        return False, 0, 0
 
 
 class ImagePathFixer:
@@ -489,20 +556,43 @@ class WiznoteToObsidianMigrator:
         }
 
     def convert_links(self) -> Dict:
-        """转换链接为 WikiLinks"""
+        """转换链接为 WikiLinks（文档链接 + 图片链接）"""
         print("🔗 转换链接为 WikiLinks...\n")
 
         converter = LinkConverter(self.config.target_dir)
         converted_count = 0
+        total_md_links = 0
+        total_img_links = 0
 
-        for md_file in Path(self.config.target_dir).rglob('*.md'):
-            if converter.convert_file(str(md_file)):
+        md_files = list(Path(self.config.target_dir).rglob('*.md'))
+        # 排除 .obsidian 和 .trash 目录
+        md_files = [f for f in md_files if '.obsidian' not in str(f) and '.trash' not in str(f)]
+
+        for i, md_file in enumerate(md_files, 1):
+            modified, md_count, img_count = converter.convert_file(str(md_file))
+            if modified:
                 converted_count += 1
+                total_md_links += md_count
+                total_img_links += img_count
 
-        print(f"📊 转换完成：")
+                # 打印进度
+                rel_path = str(md_file.relative_to(self.config.target_dir))
+                print(f"[{i}/{len(md_files)}] ✅ {rel_path}")
+                if md_count > 0:
+                    print(f"         📎 转换了 {md_count} 个文档链接")
+                if img_count > 0:
+                    print(f"         🖼️  转换了 {img_count} 个图片链接")
+
+        print(f"\n📊 转换完成：")
         print(f"   - 修改的文件: {converted_count}")
+        print(f"   - 文档链接转换: {total_md_links}")
+        print(f"   - 图片链接转换: {total_img_links}")
 
-        return {'converted_files': converted_count}
+        return {
+            'converted_files': converted_count,
+            'md_links': total_md_links,
+            'img_links': total_img_links
+        }
 
     def fix_images(self) -> Dict:
         """修复图片路径"""
@@ -611,61 +701,16 @@ class WiznoteToObsidianMigrator:
         }
 
     def migrate_attachments(self, dry_run: bool = False):
-        """迁移附件文件"""
-        print(f"📦 迁移附件文件...")
-        print(f"源目录: {self.config.target_dir}")
-        print(f"目标目录: {self.config.vault_dir}")
-        print(f"模式: {'干运行' if dry_run else '实际迁移'}\n")
-
-        # 动态导入附件迁移工具
-        import subprocess
-        import sys
-
-        script_path = Path(__file__).parent / "migrate_attachments.py"
-
-        if not script_path.exists():
-            print(f"❌ 找不到附件迁移工具: {script_path}")
-            return {'success': False, 'error': '工具不存在'}
-
-        cmd = [sys.executable, str(script_path),
-               '--export-dir', self.config.target_dir,
-               '--vault-dir', self.config.vault_dir]
-
-        if dry_run:
-            cmd.append('--dry-run')
-
-        try:
-            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-            print(result.stdout)
-            return {'success': True}
-        except subprocess.CalledProcessError as e:
-            print(f"❌ 附件迁移失败: {e}")
-            print(e.stderr)
-            return {'success': False, 'error': str(e)}
+        """迁移附件文件（已废弃，请使用 consolidate_attachments.py）"""
+        print("⚠️  此功能已废弃")
+        print("请使用新工具：python3 tools/consolidate_attachments.py migrate /path/to/vault")
+        return {'success': False, 'error': '功能已废弃，请使用 consolidate_attachments.py'}
 
     def link_attachments(self, dry_run: bool = False):
-        """为笔记添加附件链接"""
-        print(f"🔗 为笔记添加附件链接...")
-        print(f"导出目录: {self.config.target_dir}")
-        print(f"Vault 目录: {self.config.vault_dir}")
-        print(f"模式: {'干运行' if dry_run else '实际添加'}\n")
-
-        # 动态导入附件链接工具
-        import subprocess
-        import sys
-
-        script_path = Path(__file__).parent / "link_attachments.py"
-
-        if not script_path.exists():
-            print(f"❌ 找不到附件链接工具: {script_path}")
-            return {'success': False, 'error': '工具不存在'}
-
-        cmd = [sys.executable, str(script_path),
-               '--export-dir', self.config.target_dir,
-               '--vault-dir', self.config.vault_dir]
-
-        if dry_run:
-            cmd.append('--dry-run')
+        """为笔记添加附件链接（已废弃，请使用 vault_cleaner.py fix）"""
+        print("⚠️  此功能已废弃")
+        print("请使用新工具：python3 tools/vault_cleaner.py fix /path/to/vault")
+        return {'success': False, 'error': '功能已废弃，请使用 vault_cleaner.py fix'}
 
         try:
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
@@ -698,6 +743,7 @@ def main():
     )
 
     parser.add_argument('--config', help='配置文件路径 (JSON 格式)')
+    parser.add_argument('--vault', help='Obsidian 仓库路径（优先级最高）')
     parser.add_argument('--all', action='store_true', help='执行完整流程')
     parser.add_argument('--check', action='store_true', help='检查 Markdown 语法')
     parser.add_argument('--fix', action='store_true', help='修复格式问题')
@@ -712,6 +758,14 @@ def main():
 
     # 加载配置
     config = Config(args.config)
+
+    # 如果指定了 --vault，覆盖所有路径配置
+    if args.vault:
+        vault_path = Path(args.vault).expanduser().resolve()
+        config.source_dir = str(vault_path)
+        config.target_dir = str(vault_path)
+        config.vault_dir = str(vault_path)
+        config.attachments_dir = str(vault_path / "attachments")
 
     # 创建迁移器
     migrator = WiznoteToObsidianMigrator(config)

@@ -188,7 +188,7 @@ def fix_markdown(file_path: str) -> bool:
 ### 环境信息
 - OS: [如 macOS 14.0]
 - Python 版本: [如 3.11.0]
-- 工具版本: [如 v1.1.0]
+- 工具版本: [如 v1.2.0]
 
 ### 相关日志
 ```

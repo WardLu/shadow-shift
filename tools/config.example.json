@@ -17,5 +17,12 @@
     "*.tmp",
     "temp/*",
     "archive/*"
-  ]
+  ],
+
+  "cleanup": {
+    "resource_dir_names": ["attachments", "images", "all_image", "all_images"],
+    "resource_dir_suffixes": ["_files"],
+    "exclude_extensions": [".pdf", ".xls", ".xlsx", ".xmind"],
+    "protected_filenames": ["template", "模板", "tpl"]
+  }
 }

@@ -2,8 +2,11 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.6+-blue.svg)](https://www.python.org/)
+[![Version](https://img.shields.io/badge/version-1.2.0-green.svg)](CHANGELOG.md)
 
 > 一键将 WizNote 笔记迁移到 Obsidian，支持协作笔记、图片、附件
+>
+> 📖 **[快速参考指南](QUICK_REFERENCE.md)** | 📚 **[文档索引](DOCUMENTATION_INDEX.md)**
 
 ---
 
@@ -617,80 +620,7 @@ cat sync_delete_*.log
 
 ---
 
-#### 2. migrate_attachments.py（附件迁移工具）
-
-**作用**：将 WizNote 导出的附件迁移到 Obsidian Vault
-
-**使用场景**：
-- 需要迁移 PDF、XMind、Excel 等附件
-- 附件分散在多个目录
-- 需要统一管理附件
-
-**支持附件类型**：
-- PDF 文档
-- XMind 思维导图
-- Excel 表格
-- PowerPoint 演示文稿
-- 图片文件
-- 其他文件
-
-**使用方法**：
-```bash
-python3 tools/migrate_attachments.py \
-  --export-dir ~/wiznote_export \
-  --vault-dir ~/ObsidianVault
-```
-
-**输出**：
-- 附件文件：`{vault_dir}/attachments/`
-- 附件清单：`{vault_dir}/attachments/附件清单.md`
-
-**注意**：
-- 已整合到主工具 `obsidian_formatter.py --migrate-attachments`
-- 建议配合 `link_attachments.py` 使用
-
----
-
-#### 3. link_attachments.py（附件链接工具）
-
-**作用**：自动为笔记添加附件引用链接
-
-**使用场景**：
-- 已迁移附件但笔记中没有链接
-- 需要自动匹配笔记与附件
-- 批量添加附件引用
-
-**智能匹配**：
-- 根据文件名匹配附件
-- 支持模糊匹配
-- 按文件类型分组
-- 自动添加附件链接区块
-
-**使用方法**：
-```bash
-python3 tools/link_attachments.py \
-  --export-dir ~/wiznote_export \
-  --vault-dir ~/ObsidianVault
-```
-
-**添加的链接格式**：
-```markdown
-## 附件
-
-### PDF 文档
-- [[attachments/document.pdf|文档]] (2.5 MB)
-
-### 思维导图
-- [[attachments/mindmap.xmind|思维导图]] (1.2 MB)
-```
-
-**注意**：
-- 已整合到主工具 `obsidian_formatter.py --link-attachments`
-- 建议在 `migrate_attachments.py` 之后使用
-
----
-
-#### 4. config_helper.py（配置助手模块）
+#### 2. config_helper.py（配置助手模块）
 
 **作用**：配置管理助手，供其他工具使用
 

@@ -1,72 +1,93 @@
 # Tools 目录
 
-所有迁移工具和辅助脚本
+> **版本**: v1.2.0 | 所有迁移工具和辅助脚本
 
 ## 📁 目录结构
 
 ```
 tools/
-├── wiznote_downloader.py       📥 在线下载工具
-├── obsidian_formatter.py       🔧 主格式化工具（推荐使用）
-├── sync_deletions.py           🗑️  同步删除工具
-├── migrate_attachments.py      📎 附件迁移工具
-├── link_attachments.py         🔗 附件链接工具
-├── normalize_attachments.py    🧹 附件归一化工具
-├── config_helper.py            ⚙️  配置模块
-├── config.example.json         📝 配置模板
-└── README.md                   📖 本文档
+│
+│  ── 迁移工具（WizNote → Obsidian）──
+│
+├── wiznote_downloader.py              # 从 WizNote 云端下载笔记
+├── smart_migrate_to_obsidian.py       # 智能迁移工具（推荐）⭐
+├── obsidian_formatter.py              # 格式化工具
+├── obsidian_health_check.py           # 健康检查工具 ⭐
+├── scan_wikilinks.py                  # WikiLink 扫描工具
+├── sync_deletions.py                  # 同步删除工具
+├── config_helper.py                   # 配置管理模块（被其他工具调用）
+│
+│  ── 仓库维护（Obsidian 日常清理）──
+│
+├── consolidate_attachments.py         # 散落资源整合 ⭐
+├── vault_cleaner.py                  # 仓库清理（去重 + 近似重复 + 空内容 + 孤儿文件 + 引用修复）⭐
+│
+│  ── 辅助工具（特定场景）──
+│
+├── fix_wiznote_source_files.py        # 源文件修复工具（Typora 兼容）
+├── integrate_missing_attachments.py   # 整合缺失附件
+├── migrate_manual_notes.py            # 手动迁移特定笔记
+├── remigrate_single_note.py           # 重新迁移单个笔记
+├── move_note_to_correct_path.py       # 移动笔记到正确路径
+├── check_attachment_migration.py      # 附件迁移完整性检查
+├── check_attachment_migration_fixed.py # 附件迁移检查（修复版）
+├── check_attachments_final.py         # 附件完整性最终检查
+├── compare_migration.py               # 迁移结果对比
+├── diagnose_missing_notes.py          # 缺失笔记诊断
+│
+└── config.example.json                # 配置文件模板
 ```
 
 ## 🚀 快速开始
 
-### 前置要求
-
-```bash
-# 安装依赖（仅在线下载需要）
-pip3 install -r requirements.txt
-# 或手动安装: pip3 install requests markdownify websocket-client
-```
-
-### 方式一：在线下载（推荐新手）
+### 场景 1：从 WizNote 云端下载并迁移（推荐新手）
 
 ```bash
 # 1. 从 WizNote 云端下载笔记
 python3 tools/wiznote_downloader.py
 # 输入 WizNote 账号和密码
 
-# 2. 优化格式
-python3 tools/obsidian_formatter.py
-# 输出到 wiznote_obsidian/，原始 wiznote_download/ 保持不变
+# 2. 智能迁移到 Obsidian
+python3 tools/smart_migrate_to_obsidian.py
 ```
 
-### 方式二：离线处理（已有导出文件）
+### 场景 2：已有 WizNote 导出文件
 
 ```bash
-# 注意：离线处理不需要额外依赖
-
-# 执行完整流程
-python3 tools/obsidian_formatter.py
-
-# 查看帮助
-python3 tools/obsidian_formatter.py --help
+# 直接运行智能迁移
+python3 tools/smart_migrate_to_obsidian.py
 ```
 
-### 使用配置文件
+### 场景 3：检查仓库健康度
 
 ```bash
-# 复制配置模板
-cp config.example.json config.json
-
-# 编辑配置
-vim config.json
-
-# 使用配置文件
-python3 tools/obsidian_formatter.py --config config.json
+python3 tools/obsidian_health_check.py
 ```
 
-## 🛠️ 工具说明
+### 场景 4：清理 Obsidian 仓库
 
-### 主要工具
+```bash
+# 推荐流程：fix → fuzzy → dedup → orphan → clean
+
+# 1. 修复失效引用
+python3 tools/vault_cleaner.py fix /path/to/vault --apply
+
+# 2. 近似重复笔记清理
+python3 tools/vault_cleaner.py fuzzy /path/to/vault --apply
+
+# 3. 去重
+python3 tools/vault_cleaner.py dedup /path/to/vault --apply
+
+# 4. 清理孤儿文件
+python3 tools/vault_cleaner.py orphan /path/to/vault --apply
+
+# 5. 清理空笔记和空目录
+python3 tools/vault_cleaner.py clean /path/to/vault --fix-untitled --apply
+```
+
+## 🛠️ 核心工具说明
+
+### 迁移工具（WizNote → Obsidian）
 
 #### 1. wiznote_downloader.py（在线下载工具）
 
@@ -78,183 +99,179 @@ python3 tools/obsidian_formatter.py --config config.json
 - 直接登录 WizNote 云端
 - 递归扫描所有文件夹
 - 自动转换 HTML → Markdown
-- ✅ 下载笔记中的图片（使用增强版 API）
-- ✅ 下载笔记中的附件（PDF、XMind 等）
-- ✅ 支持协作笔记下载（通过 WebSocket 协议）
+- 下载笔记中的图片和附件
+- 支持协作笔记下载（通过 WebSocket 协议）
 
 **输出目录**：`wiznote_download/`（原始下载）
 
-**格式化输出**：`wiznote_obsidian/`（在 Obsidian 中打开这个）
-
-**注意**：
-- ✅ **图片和附件下载已支持**：使用增强版 API 端点
-- ✅ **协作笔记已支持**：通过 ShareJS 协议自动获取
-- ✅ **加密笔记检测已支持**：自动识别并提醒用户解密
-- 💡 **图片位置**：保存在 `{笔记名}_files/` 目录
-- 💡 **附件位置**：保存在同目录下的 `_files/` 文件夹
-- 💡 **协作笔记**：自动检测并通过 WebSocket 获取内容，转换为 Markdown
-- 💡 **加密笔记**：记录在报告中，提示用户先解密再下载
-- 💡 **成功率**：实测 99.6%（447/449 个笔记）
-
 **使用方法**：
 ```bash
-# 使用默认参数（推荐新手）
 python3 tools/wiznote_downloader.py
-# 按提示输入 WizNote 账号和密码
-
-# 极速模式（网络好，快速下载）
 python3 tools/wiznote_downloader.py --workers 10 --timeout 20
-
-# 安全模式（网络差，避免卡住）
 python3 tools/wiznote_downloader.py --workers 3 --timeout 10 --retries 1
-
-# 查看所有参数
-python3 tools/wiznote_downloader.py --help
 ```
-
-**参数说明**：
-- `--workers, -w` - 并发线程数（默认: 5，推荐: 3-10）
-- `--timeout, -t` - 下载超时时间/秒（默认: 15，推荐: 10-30）
-- `--retries, -r` - 失败重试次数（默认: 2，推荐: 1-3）
-- `--connect-timeout, -c` - 连接超时时间/秒（默认: 10，推荐: 5-15）
 
 **支持的笔记类型**：
+- ✅ HTML 笔记 - 自动转换为 Markdown
+- ✅ Lite/Markdown 笔记 - 直接保存原格式
+- ✅ 协作笔记 - 通过 ShareJS 协议自动获取并转换
+- ⚠️ 加密笔记 - 检测提醒，需要先在客户端解密
+- ✅ 图片/附件 - 下载到 `_files/` 目录
 
-| 类型 | 支持程度 | 说明 |
-|------|---------|------|
-| HTML 笔记 | ✅ 完全支持 | 自动转换为 Markdown |
-| Lite/Markdown 笔记 | ✅ 完全支持 | 直接保存原格式 |
-| 协作笔记 | ✅ 完全支持 | 通过 ShareJS 协议自动获取并转换 |
-| 加密笔记 | ⚠️ 检测提醒 | 需要先在客户端解密（RSA+AES） |
-| 图片/附件 | ✅ 完全支持 | 下载到 `_files/` 目录 |
+#### 2. smart_migrate_to_obsidian.py（智能迁移工具）⭐ 推荐
 
-**已知限制**：
-- 复杂 HTML 表格转换可能不完美
-- 某些协作笔记可能需要手动处理
-- 加密笔记需要手动解密后重新下载
+**作用**：智能迁移 WizNote 笔记到 Obsidian，支持 WikiLink 格式
 
-#### 2. obsidian_formatter.py（主工具）
-
-**作用**：一体化格式化工具，整合所有功能
-
-**使用场景**：90% 的场景都使用这个工具
+**使用场景**：90% 的迁移场景都使用这个工具
 
 **功能**：
-- 语法检查
-- 格式修复
-- 链接转换
-- 图片修复
-- 附件迁移
-- 附件链接
-- 生成报告
-
-**参数**：
-- 无参数 - 执行基础5步（默认）
-- `--all` - 执行完整流程（7步，包含附件迁移）
-- `--check` - 只检查语法
-- `--fix` - 只修复格式
-- `--links` - 只转换链接
-- `--images` - 只修复图片
-- `--migrate-attachments` - 迁移附件
-- `--link-attachments` - 添加附件链接
-- `--report` - 生成报告
-- `--dry-run` - 干运行模式
+- ✅ 自动检测并迁移笔记
+- ✅ 支持标准 Markdown 链接和 WikiLink 格式
+- ✅ 自动转换 WikiLink → Markdown 链接
+- ✅ 迁移所有附件（.xmind, .pdf, .doc 等）
+- ✅ 完整性检查和生成报告
 
 **使用方法**：
 ```bash
-# 基础迁移（5步，推荐）
-python3 tools/obsidian_formatter.py
-
-# 完整迁移（7步，包含附件）
-python3 tools/obsidian_formatter.py --all
-
-# 只检查语法
-python3 tools/obsidian_formatter.py --check
-
-# 干运行模式（预览）
-python3 tools/obsidian_formatter.py --fix --dry-run
+python3 tools/smart_migrate_to_obsidian.py
 ```
 
-#### 3. sync_deletions.py
+#### 3. obsidian_health_check.py（健康检查工具）⭐
 
-**作用**：安全地同步两个目录的删除操作
-
-**使用场景**：在 WizNote 中删除笔记后同步到 Obsidian
-
-**安全特性**：
-- 必须人工确认
-- 执行前显示完整清单
-- 生成删除日志
-- 支持干运行模式
-
-**使用方法**：
-```bash
-# 扫描差异（只查看）
-python3 tools/sync_deletions.py --scan \
-  --source wiznote_obsidian \
-  --target ~/ObsidianVault
-
-# 确认删除
-python3 tools/sync_deletions.py --confirm \
-  --source wiznote_obsidian \
-  --target ~/ObsidianVault
-```
-
-#### 4. migrate_attachments.py
-
-**作用**：迁移 PDF、XMind、Excel 等附件
-
-**使用场景**：需要迁移附件文件
-
-**注意**：已整合到主工具 `obsidian_formatter.py --migrate-attachments`
-
-#### 5. link_attachments.py
-
-**作用**：为笔记添加附件引用
-
-**使用场景**：已迁移附件但笔记中没有链接
-
-**注意**：已整合到主工具 `obsidian_formatter.py --link-attachments`
-
-#### 6. normalize_attachments.py
-
-**作用**：将笔记旁的 `*_files/` 图片和附件统一迁移到 Vault 根目录的 `attachments/`
-
-**使用场景**：
-- 希望按 Obsidian 常见做法集中管理附件
-- 想把正文里的 `Some Note_files/foo.png` 改成 Obsidian 友好的附件引用
-- 想清理导出后残留的未引用图片，例如常见的 `wizIcon_icons_l.png`、`wizIcon_icons_m.png`、`wizIcon_icons_s.png`
+**作用**：全面检查 Obsidian 仓库的健康状态
 
 **功能**：
-- 将被正文引用的本地图片改写为 `![[attachments/...]]`
-- 将被正文引用的本地非图片附件改写为 `[[attachments/...|原文本]]`
-- 修改 Markdown 前自动生成 `.attachbak` 备份
-- 可选删除空图片占位 `![]()`
-- 可选列出并删除 `*_files/` 中未被引用的残留图片，同时清理变空目录
+- ✅ 检查附件完整性（图片、PDF、附件）
+- ✅ 检查重复内容（文件级别）
+- ✅ 检查内容过少的文件
+- ✅ 生成健康度评分（0-100）
 
 **使用方法**：
 ```bash
-# 预览即将执行的变更
-python3 tools/normalize_attachments.py --dry-run
-
-# 迁移正文实际引用到的图片/附件
-python3 tools/normalize_attachments.py
-
-# 连同空图片占位和未引用的残留图片一起清理
-python3 tools/normalize_attachments.py \
-  --remove-empty-placeholders \
-  --delete-unreferenced-images
+python3 tools/obsidian_health_check.py
+python3 tools/obsidian_health_check.py --quick
 ```
 
-### 辅助工具
+### 仓库维护工具
 
-#### 7. config_helper.py
+#### 4. consolidate_attachments.py（散落资源整合工具）
 
-**作用**：配置管理模块
+**作用**：将散落的 `*_files`、`attachments`、`images` 等目录统一归档到顶层 `attachments/`
 
-**使用场景**：开发新工具时使用
+**使用场景**：Obsidian 仓库中有大量散落的资源目录，侧边栏杂乱
 
-**注意**：不需要直接运行，被其他工具调用
+**三种模式**：
+
+| 模式 | 说明 |
+|------|------|
+| `scan` | 仅扫描并报告散落的资源目录 |
+| `dry-run` | 模拟迁移，显示将要执行的操作 |
+| `migrate` | 执行迁移：移动文件 → 更新引用 → 清理空目录 |
+
+**使用方法**：
+```bash
+python3 tools/consolidate_attachments.py scan /path/to/vault
+python3 tools/consolidate_attachments.py dry-run /path/to/vault
+python3 tools/consolidate_attachments.py migrate /path/to/vault
+```
+
+**注意**：迁移后在 Obsidian 设置中配置 `Settings → Files and Links → Default location for new attachments → attachments`。
+
+#### 5. vault_cleaner.py（仓库清理工具）
+
+**作用**：检测并清理重复文件、近似重复笔记、孤儿文件，并修复失效引用
+
+**五种模式**：
+
+| 模式 | 说明 |
+|------|------|
+| `dedup` | 按内容哈希检测重复文件，每组保留一个，删除其余并更新引用 |
+| `fuzzy` | 检测近似重复笔记（按标题+纯文本比对，显示相似度百分比，支持 `--threshold` 调整阈值） |
+| `clean` | 检测并清理空笔记和空目录，支持 `--fix-untitled` 清理「无标题」占位符 |
+| `orphan` | 检测未被任何笔记引用的资源文件（孤儿文件） |
+| `fix` | 修复失效引用，将孤儿文件重新链接到笔记 |
+
+**使用方法**：
+```bash
+# 修复失效引用
+python3 tools/vault_cleaner.py fix /path/to/vault
+python3 tools/vault_cleaner.py fix /path/to/vault --apply
+
+# 近似重复笔记清理（带引用重定向）
+python3 tools/vault_cleaner.py fuzzy /path/to/vault
+python3 tools/vault_cleaner.py fuzzy /path/to/vault --apply
+python3 tools/vault_cleaner.py fuzzy /path/to/vault --threshold 0.25 --apply
+
+# 文件去重（带引用更新）
+python3 tools/vault_cleaner.py dedup /path/to/vault
+python3 tools/vault_cleaner.py dedup /path/to/vault --apply
+
+# 孤儿文件清理（默认排除 .pdf .xls .xlsx .xmind）
+python3 tools/vault_cleaner.py orphan /path/to/vault
+python3 tools/vault_cleaner.py orphan /path/to/vault --apply
+
+# 清理空笔记和空目录
+python3 tools/vault_cleaner.py clean /path/to/vault
+python3 tools/vault_cleaner.py clean /path/to/vault --fix-untitled --apply
+```
+
+**推荐流程**：`fix` → `fuzzy` → `dedup` → `orphan` → `clean`
+
+**模板保护**：文件名含 `template`、`模板`、`tpl` 的笔记不会被 fuzzy 删除。
+
+**引用安全**：
+- `dedup`：删除前更新所有指向被删文件的引用（Markdown/WikiLink/HTML）
+- `fuzzy`：删除前把 `[[被删笔记标题]]` 重定向到保留笔记
+- `orphan`：按绝对路径+文件名双重匹配，仅删除真正无引用的文件
+
+**默认排除**：`orphan` 模式默认排除 `.pdf`、`.xls`、`.xlsx`、`.xmind`，可通过 `--exclude-ext` 自定义。
+
+**配置**：清理相关的目录名、排除扩展名、模板保护关键词可通过 `config.json` 的 `cleanup` 节点配置。
+
+### 辅助工具说明
+
+#### 6. fix_wiznote_source_files.py
+
+**作用**：修复 WizNote 源文件中的 WikiLink，转换为标准 Markdown 格式
+
+**使用场景**：确保源文件在 Typora 等标准 Markdown 编辑器中正常显示
+
+```bash
+python3 tools/fix_wiznote_source_files.py
+```
+
+#### 7. integrate_missing_attachments.py
+
+**作用**：将"缺失图片及附件笔记"目录中的笔记和附件整合到主目录
+
+```bash
+python3 tools/integrate_missing_attachments.py
+```
+
+#### 8. migrate_manual_notes.py
+
+**作用**：手动迁移特定笔记
+
+#### 9. remigrate_single_note.py
+
+**作用**：重新迁移单个笔记
+
+#### 10. move_note_to_correct_path.py
+
+**作用**：移动笔记到正确的路径
+
+#### 11-15. 迁移检查工具
+
+```bash
+python3 tools/check_attachment_migration.py --help
+python3 tools/check_attachments_final.py --help
+python3 tools/compare_migration.py --help
+python3 tools/diagnose_missing_notes.py --help
+```
+
+#### 16. config_helper.py
+
+**作用**：配置管理模块（被其他工具调用，不需要直接运行）
 
 ## ⚙️ 配置说明
 
@@ -263,7 +280,6 @@ python3 tools/normalize_attachments.py \
 ```bash
 export WIZNOTE_SOURCE_DIR=wiznote_download
 export WIZNOTE_VAULT_DIR=wiznote_obsidian
-# target_dir 默认指向 wiznote_obsidian/ 目录
 export WIZNOTE_ATTACHMENTS_DIR=wiznote_obsidian/attachments
 ```
 
@@ -271,47 +287,54 @@ export WIZNOTE_ATTACHMENTS_DIR=wiznote_obsidian/attachments
 
 ```bash
 cp config.example.json config.json
-# 编辑 config.json
-python3 tools/obsidian_formatter.py --config config.json
+python3 tools/smart_migrate_to_obsidian.py --config config.json
 ```
 
-### 方式 3：使用默认路径
+`config.json` 支持的配置节：
+- `source_dir` / `vault_dir` / `target_dir` — 迁移路径
+- `categories` — 笔记分类和标签
+- `cleanup` — 清理工具配置（资源目录名、排除扩展名、模板保护等）
 
-工具会自动使用以下默认路径：
-- `source_dir`: `wiznote_download/`（原始下载）
-- `vault_dir`: `wiznote_obsidian/`（格式化输出）
-- `target_dir`: `wiznote_obsidian/`（格式化输出）
-- `attachments_dir`: `wiznote_obsidian/attachments/`
+## 🔄 工作流程
 
-## 📖 详细文档
+### 完整迁移流程
 
-完整使用指南请参考：[docs/使用指南.md](../docs/使用指南.md)
-
-## 🔍 常见问题
-
-**Q: 我应该使用哪个工具？**
-
-A:
-- 还没有导出笔记 → 使用 `wiznote_downloader.py`
-- 已有导出文件 → 使用 `obsidian_formatter.py`（默认5步）
-- 需要附件管理 → 使用 `obsidian_formatter.py --all`
-
-**Q: 输出目录在哪里？**
-
-A:
-- 原始下载：`wiznote_download/`
-- 格式化输出：`wiznote_obsidian/`（在 Obsidian 中打开这个）
-
-**Q: 如何查看工具的详细参数？**
-
-A:
-```bash
-python3 tools/obsidian_formatter.py --help
-python3 tools/sync_deletions.py --help
+```mermaid
+graph TD
+    A[开始] --> B{有 WizNote 导出文件?}
+    B -->|否| C[wiznote_downloader.py]
+    B -->|是| D[smart_migrate_to_obsidian.py]
+    C --> D
+    D --> E[obsidian_health_check.py]
+    E --> F{有缺失附件?}
+    F -->|是| G[smart_migrate_to_obsidian.py]
+    F -->|否| H[完成]
+    G --> E
 ```
 
-**Q: 主工具的参数太多，记不住怎么办？**
+## 💡 最佳实践
 
-A:
-- 记住 `--all` 就够了，90% 的场景都够用
-- 需要单独功能时再查看 `--help`
+1. **首次迁移**：
+   - 使用 `wiznote_downloader.py` 下载笔记
+   - 使用 `fix_wiznote_source_files.py` 修复源文件
+   - 使用 `smart_migrate_to_obsidian.py` 迁移到 Obsidian
+   - 使用 `obsidian_health_check.py` 验证
+
+2. **定期检查**：
+   - 定期运行 `obsidian_health_check.py` 检查仓库健康度
+
+3. **清理仓库**：
+   - 先 `consolidate_attachments.py` 整合散落资源
+   - 再 `vault_cleaner.py` 按流程清理
+
+## 📊 工具对比
+
+| 功能 | wiznote_downloader | smart_migrate | obsidian_formatter | health_check | consolidate | vault_cleaner |
+|------|-------------------|---------------|-------------------|--------------|-------------|---------------|
+| 下载笔记 | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| 迁移笔记 | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ |
+| 检查附件 | ❌ | ✅ | ❌ | ✅ | ❌ | ❌ |
+| 去重 | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| 近似重复 | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| 整合资源 | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| 生成报告 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |

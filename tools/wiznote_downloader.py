@@ -145,6 +145,44 @@ class WizMigrator:
             safe = "Untitled"
         return safe
 
+    def clean_opening_title(self, content, note_title):
+        """
+        Remove duplicated opening titles left in note bodies after export.
+
+        Some WizNote notes start with one of the following immediately after the
+        generated frontmatter:
+        - a Markdown heading matching the note title
+        - a plain text line matching the note title
+        - a placeholder '无标题'
+        """
+        if not content:
+            return content
+
+        lines = content.splitlines(keepends=True)
+        idx = 0
+
+        while idx < len(lines) and not lines[idx].strip():
+            idx += 1
+
+        def is_duplicate_opening(line):
+            stripped = line.strip()
+            if not stripped:
+                return False
+            if stripped == "无标题":
+                return True
+            if stripped == note_title:
+                return True
+
+            heading = re.match(r'^#{1,6}\s+(.*)$', stripped)
+            return bool(heading and heading.group(1).strip() == note_title)
+
+        while idx < len(lines) and is_duplicate_opening(lines[idx]):
+            idx += 1
+            while idx < len(lines) and not lines[idx].strip():
+                idx += 1
+
+        return "".join(lines[idx:]).lstrip("\n")
+
     def get_note_resources(self, doc_guid):
         """
         获取笔记的资源列表（图片等）
@@ -774,6 +812,8 @@ class WizMigrator:
             else:
                 # HTML 笔记需要转换为 Markdown
                 md_content = md(html_content, heading_style="ATX")
+
+            md_content = self.clean_opening_title(md_content, note_title)
 
             # 添加附件链接（使用相对路径）
             if attachments_downloaded > 0:

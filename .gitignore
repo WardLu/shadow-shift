@@ -73,3 +73,4 @@ supabase/
 
 # Claude Code 配置
 .claude/
+CLAUDE.md

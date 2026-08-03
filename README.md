@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.6+-blue.svg)](https://www.python.org/)
-[![Version](https://img.shields.io/badge/version-1.2.0-green.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.2.1-green.svg)](CHANGELOG.md)
 
 > 一键将 WizNote 笔记迁移到 Obsidian，支持协作笔记、图片、附件
 >

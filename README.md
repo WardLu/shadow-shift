@@ -159,6 +159,16 @@ python3 tools/wiznote_downloader.py --help
 
 **注意**：这是默认行为，不带任何参数即可执行
 
+如果 WizNote 导出目录不在项目根目录下，可以显式指定源目录和输出目录：
+
+```bash
+python3 tools/obsidian_formatter.py \
+  --source /path/to/wiznote_export \
+  --target /path/to/wiznote_obsidian
+```
+
+如果源目录不存在，工具会在复制前给出明确错误，不再直接显示 Python 堆栈。
+
 ---
 
 #### 3. `python3 tools/obsidian_formatter.py --all` - 完整迁移（7步）

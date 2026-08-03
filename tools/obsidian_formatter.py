@@ -661,6 +661,12 @@ class WiznoteToObsidianMigrator:
 
         if source_path.resolve() != target_path.resolve():
             if not target_path.exists():
+                if not source_path.is_dir():
+                    message = f"源目录不存在或不是目录: {source_path}"
+                    print(f"❌ {message}")
+                    print("请检查路径，或使用 --source /path/to/wiznote_export 指定源目录。")
+                    raise FileNotFoundError(message)
+
                 print("📂 复制文件到目标目录...")
                 print(f"   源目录: {source_path}")
                 print(f"   目标目录: {target_path}")
@@ -743,6 +749,8 @@ def main():
     )
 
     parser.add_argument('--config', help='配置文件路径 (JSON 格式)')
+    parser.add_argument('--source', help='WizNote 导出源目录')
+    parser.add_argument('--target', help='格式化结果输出目录')
     parser.add_argument('--vault', help='Obsidian 仓库路径（优先级最高）')
     parser.add_argument('--all', action='store_true', help='执行完整流程')
     parser.add_argument('--check', action='store_true', help='检查 Markdown 语法')
@@ -759,6 +767,13 @@ def main():
     # 加载配置
     config = Config(args.config)
 
+    if args.source:
+        config.source_dir = str(Path(args.source).expanduser().resolve())
+    if args.target:
+        config.target_dir = str(Path(args.target).expanduser().resolve())
+        config.vault_dir = config.target_dir
+        config.attachments_dir = str(Path(config.target_dir) / "attachments")
+
     # 如果指定了 --vault，覆盖所有路径配置
     if args.vault:
         vault_path = Path(args.vault).expanduser().resolve()
@@ -770,39 +785,42 @@ def main():
     # 创建迁移器
     migrator = WiznoteToObsidianMigrator(config)
 
-    # 如果没有指定任何操作，执行基础格式化（5步）
-    if not any([args.all, args.check, args.fix, args.links, args.images, args.report,
-                args.migrate_attachments, args.link_attachments]):
-        # 默认执行基础5步
-        migrator.run_all()
-        return
+    try:
+        # 如果没有指定任何操作，执行基础格式化（5步）
+        if not any([args.all, args.check, args.fix, args.links, args.images, args.report,
+                    args.migrate_attachments, args.link_attachments]):
+            # 默认执行基础5步
+            migrator.run_all()
+            return
 
-    # 执行相应操作
-    if args.all:
-        # 完整迁移（7步）：基础5步 + 附件迁移 + 附件链接
-        migrator.run_all()
-        print("\n" + "="*60)
-        print("📎 附件迁移")
-        print("="*60)
-        migrator.migrate_attachments(dry_run=args.dry_run)
-        print("\n" + "="*60)
-        print("🔗 附件链接")
-        print("="*60)
-        migrator.link_attachments(dry_run=args.dry_run)
-    elif args.check:
-        migrator.check_syntax()
-    elif args.fix:
-        migrator.fix_format(dry_run=args.dry_run)
-    elif args.links:
-        migrator.convert_links()
-    elif args.images:
-        migrator.fix_images()
-    elif args.report:
-        migrator.generate_report()
-    elif args.migrate_attachments:
-        migrator.migrate_attachments(dry_run=args.dry_run)
-    elif args.link_attachments:
-        migrator.link_attachments(dry_run=args.dry_run)
+        # 执行相应操作
+        if args.all:
+            # 完整迁移（7步）：基础5步 + 附件迁移 + 附件链接
+            migrator.run_all()
+            print("\n" + "="*60)
+            print("📎 附件迁移")
+            print("="*60)
+            migrator.migrate_attachments(dry_run=args.dry_run)
+            print("\n" + "="*60)
+            print("🔗 附件链接")
+            print("="*60)
+            migrator.link_attachments(dry_run=args.dry_run)
+        elif args.check:
+            migrator.check_syntax()
+        elif args.fix:
+            migrator.fix_format(dry_run=args.dry_run)
+        elif args.links:
+            migrator.convert_links()
+        elif args.images:
+            migrator.fix_images()
+        elif args.report:
+            migrator.generate_report()
+        elif args.migrate_attachments:
+            migrator.migrate_attachments(dry_run=args.dry_run)
+        elif args.link_attachments:
+            migrator.link_attachments(dry_run=args.dry_run)
+    except FileNotFoundError as exc:
+        parser.error(str(exc))
 
 
 if __name__ == '__main__':

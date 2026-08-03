@@ -159,6 +159,16 @@ python3 tools/wiznote_downloader.py --help
 
 **注意**：这是默认行为，不带任何参数即可执行
 
+如果 WizNote 导出目录不在项目根目录下，可以显式指定源目录和输出目录：
+
+```bash
+python3 tools/obsidian_formatter.py \
+  --source /path/to/wiznote_export \
+  --target /path/to/wiznote_obsidian
+```
+
+如果源目录不存在，工具会在复制前给出明确错误，不再直接显示 Python 堆栈。
+
 ---
 
 #### 3. `python3 tools/obsidian_formatter.py --all` - 完整迁移（7步）
@@ -313,7 +323,15 @@ python3 tools/obsidian_formatter.py
 
 ## 常见问题
 
-### Q1: 默认命令和 `--all` 的区别？
+### Q1: 登录后出现 `None/ks/...` 或无法获取目录怎么办？
+
+**A**：这通常表示登录没有真正成功，但旧版本仍继续请求目录接口。当前版本会在登录失败后停止扫描并显示登录错误。
+
+如果账号启用了二次登录验证，请先在 **WizNote X 或网页版**关闭二次登录验证，再重新运行下载工具；经典版客户端没有关闭选项。
+
+---
+
+### Q2: 默认命令和 `--all` 的区别？
 
 **A**:
 - `python3 tools/obsidian_formatter.py`（默认）：执行基础5步
@@ -328,7 +346,7 @@ python3 tools/obsidian_formatter.py
 
 ---
 
-### Q2: 我需要运行 `--all` 吗？
+### Q3: 我需要运行 `--all` 吗？
 
 **A**: 大多数情况下**不需要**。
 
@@ -344,7 +362,7 @@ python3 tools/obsidian_formatter.py
 
 ---
 
-### Q3: 下载后笔记在哪里？
+### Q4: 下载后笔记在哪里？
 
 **A**:
 - 原始数据：`wiznote_download/` 目录（不会被修改）
@@ -364,7 +382,7 @@ wiznote_obsidian/          ← 格式化后的笔记（在 Obsidian 中打开）
 
 ---
 
-### Q4: 图片在哪里？
+### Q5: 图片在哪里？
 
 **A**: 在每个笔记旁边的 `*_files/` 目录中。
 

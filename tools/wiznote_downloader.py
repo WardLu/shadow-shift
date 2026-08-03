@@ -14,6 +14,7 @@ import threading
 import argparse
 import ssl
 import certifi
+from urllib.parse import urlparse
 
 try:
     from websocket import create_connection
@@ -88,6 +89,22 @@ class WizMigrator:
             "Accept": "application/json, text/plain, */*",
         })
 
+    @staticmethod
+    def _normalize_kapi_url(value):
+        """校验并规范化知识库 API 地址，避免拼出 None/ks/... URL。"""
+        if not isinstance(value, str):
+            return None
+
+        normalized = value.strip().rstrip("/")
+        if normalized.lower() in {"", "none", "null"}:
+            return None
+
+        parsed = urlparse(normalized)
+        if parsed.scheme not in {"http", "https"} or not parsed.netloc:
+            return None
+
+        return normalized
+
     def login(self):
         """
         Login to WizNote Account Server
@@ -116,11 +133,23 @@ class WizMigrator:
             result = data.get('result', data)
             self.token = result.get('token')
             self.kb_guid = result.get('kb_guid') or result.get('kbGuid')
-            self.kapi_url = result.get('kapi_url') or result.get('kbServer') or 'https://ks.wiz.cn'
+            raw_kapi_url = result.get('kapi_url') or result.get('kbServer') or 'https://ks.wiz.cn'
+            self.kapi_url = self._normalize_kapi_url(raw_kapi_url)
             self.user_guid = result.get('user_guid') or result.get('userGuid')  # 保存 user_guid
 
             if not self.token or not self.kb_guid:
-                error_msg = "登录失败：服务器未返回必要信息"
+                error_msg = (
+                    "登录失败：服务器未返回必要信息；如果账号启用了二次登录验证，"
+                    "请先在 WizNote X 或网页版关闭后重试"
+                )
+                print(f"Login failed: {error_msg}")
+                return False, error_msg
+
+            if not self.kapi_url:
+                error_msg = (
+                    "登录失败：服务器未返回有效的知识库 API 地址；如果账号启用了二次登录验证，"
+                    "请先在 WizNote X 或网页版关闭后重试"
+                )
                 print(f"Login failed: {error_msg}")
                 return False, error_msg
 
@@ -938,7 +967,14 @@ class WizMigrator:
                 break
 
     def run(self):
-        if not self.login():
+        login_result = self.login()
+        if isinstance(login_result, tuple):
+            login_success, _login_error = login_result
+        else:
+            # 兼容旧版返回布尔值的登录实现
+            login_success = login_result
+
+        if not login_success:
             return
 
         print("\n" + "="*70)

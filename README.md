@@ -177,7 +177,8 @@ export WIZNOTE_SOURCE_DIR=~/wiznote_export
 - **产品主页**：[Shadow Nexus](https://www.shadow.wang/)
 - **Email**：[wardlu@126.com](mailto:wardlu@126.com)
 
-> 可接 1v1 咨询和项目陪跑，欢迎联系。
+> **可接 1v1 咨询和项目陪跑，欢迎联系。**<br>
+> 产品诊断 · AI 实施 · 工作流 / Skill / 系统定制
 
 ---
 

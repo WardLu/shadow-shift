@@ -11,6 +11,29 @@
 
 ---
 
+## [1.2.2] - 2026-08-04
+
+### 新增
+
+- 🎨 **品牌系统**：建立「影迁 Shadow Shift」Logo 与视觉系统（方案03「层叠文档位移」），含横版组合、亮色版、favicon 多尺寸 + ico。
+- 👷 **CI/CD**：新增 GitHub Actions -- `ci.yml`（pytest + py_compile）、`codeql.yml`（Python 安全分析）、`dependabot.yml`（pip + github-actions 依赖更新）。
+- 📋 新增 PR 模板（`PULL_REQUEST_TEMPLATE.md`）。
+
+### 改进
+
+- 📝 重新设计 README 主页（778 -> 174 行），集成 hero/workflow 视觉模块，精简 FAQ 与重复说明。
+- 🔒 `main` 分支启用严格保护（要求 PR + `verify` status check，禁止 force push / 删除，管理员可绕过）。
+
+### 验证
+
+- `pytest tests/`：7 passed
+- CI `verify` job 通过（Python 3.11）
+- README 图片引用路径校验通过
+
+本 Release 不包含 `app/` 子模块的现有工作区修改。
+
+---
+
 ## [1.2.1] - 2026-08-03
 
 ### 修复

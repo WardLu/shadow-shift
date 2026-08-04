@@ -4,7 +4,7 @@
 # 在线下载工具依赖
 requests>=2.34.2          # HTTP 请求库
 markdownify>=0.6.1        # HTML 转 Markdown
-websocket-client>=1.0.0   # WebSocket 支持（协作笔记）
+websocket-client>=1.9.0   # WebSocket 支持（协作笔记）
 
 # 离线格式化工具
 # 无需额外依赖，纯 Python 3.6+ 即可运行

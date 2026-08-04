@@ -3,7 +3,7 @@
 
 # 在线下载工具依赖
 requests>=2.34.2          # HTTP 请求库
-markdownify>=0.6.1        # HTML 转 Markdown
+markdownify>=1.2.3        # HTML 转 Markdown
 websocket-client>=1.9.0   # WebSocket 支持（协作笔记）
 
 # 离线格式化工具

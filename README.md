@@ -167,6 +167,18 @@ export WIZNOTE_SOURCE_DIR=~/wiznote_export
 
 [MIT License](LICENSE)
 
+## 联系我
+
+- **X (Twitter)**：[@Gollumgulu](https://x.com/Gollumgulu)
+- **微信公众号**：Ward的AI产品实战
+  ![微信公众号二维码](https://cdn.jsdelivr.net/gh/WardLu/mypic//images%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7.jpg)
+- **小红书 / 微博 / 抖音**：全网同名 `Ward的AI产品实战` · [小红书](https://xhslink.cn/m/4W1NWyRrxv5) · [微博](https://weibo.com/u/8344390431) · [抖音](https://v.douyin.com/1y06PMohfoE/)
+- **个人主页**：全力开发中...
+- **产品主页**：[Shadow Nexus](https://www.shadow.wang/)
+- **Email**：[wardlu@126.com](mailto:wardlu@126.com)
+
+> 可接 1v1 咨询和项目陪跑，欢迎联系。
+
 ---
 
 <p align="center">

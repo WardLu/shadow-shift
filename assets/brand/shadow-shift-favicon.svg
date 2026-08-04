@@ -1,0 +1,21 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="favGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee" />
+      <stop offset="50%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="#a855f7" />
+    </linearGradient>
+    <filter id="favGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />
+      <feMerge>
+        <feMergeNode in="coloredBlur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="120" height="120" rx="24" fill="#030712" />
+  <!-- simplified 3-layer cards, no inner text lines (legible at small sizes) -->
+  <rect x="24" y="58" width="56" height="42" rx="8" stroke="#3b82f6" stroke-width="4" fill="none" opacity="0.35" />
+  <rect x="34" y="44" width="56" height="42" rx="8" stroke="#4f46e5" stroke-width="4" fill="none" opacity="0.6" />
+  <rect x="44" y="30" width="56" height="42" rx="8" stroke="url(#favGrad)" stroke-width="5" fill="none" filter="url(#favGlow)" />
+</svg>

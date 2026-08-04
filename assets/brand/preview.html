@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>影迁 Shadow Shift - 品牌资产</title>
+<style>
+  :root { --bg:#030712; --card:#0f172a; --border:#1e293b; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:#e2e8f0; font-family:-apple-system,"PingFang SC",system-ui,sans-serif; padding:40px 20px; }
+  h1 { text-align:center; font-size:30px; margin-bottom:6px;
+       background:linear-gradient(90deg,#22d3ee,#818cf8,#a855f7); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .sub { text-align:center; color:#64748b; margin-bottom:40px; font-size:14px; }
+  .wrap { max-width:1080px; margin:0 auto; }
+  .section { margin-bottom:48px; }
+  .section h2 { font-size:18px; color:#818cf8; margin-bottom:16px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:28px; }
+  .center { display:flex; align-items:center; justify-content:center; }
+  .darkbg { background:var(--bg); border-radius:12px; padding:24px; }
+  .lightbg { background:#f8fafc; border-radius:12px; padding:24px; }
+  .row { display:flex; gap:24px; flex-wrap:wrap; align-items:center; justify-content:center; }
+  .row > div { text-align:center; }
+  .label { font-size:12px; color:#64748b; margin-top:8px; }
+  .favcell { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; display:flex; flex-direction:column; align-items:center; gap:10px; }
+  .favcell img { display:block; image-rendering:pixelated; }
+  code { background:#1e293b; padding:2px 6px; border-radius:4px; font-size:12px; color:#22d3ee; }
+  .pre { background:#0b1120; border:1px solid var(--border); border-radius:8px; padding:14px; font-size:12px; line-height:1.7; color:#94a3b8; overflow-x:auto; font-family:"SF Mono",monospace; }
+</style>
+</head>
+<body>
+  <h1>影迁 Shadow Shift</h1>
+  <p class="sub">品牌资产包 · 方案03 层叠文档位移 · 延续 Shadow 系列暗色赛博基因</p>
+  <div class="wrap">
+
+    <div class="section">
+      <h2>横版组合 Logo</h2>
+      <div class="card">
+        <div class="darkbg center">
+          <img src="shadow-shift-logo-horizontal-dark.png" width="480" alt="horizontal logo dark">
+        </div>
+        <div class="label" style="text-align:center;margin-top:12px;">深色背景（#030712）· 960×240 · 透明 PNG 另有 <code>shadow-shift-logo-horizontal.png</code></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>图标版 · 深色 / 亮色</h2>
+      <div class="card">
+        <div class="row">
+          <div>
+            <div class="darkbg"><img src="shadow-shift-03-layered.svg" width="140" alt="icon dark"></div>
+            <div class="label">深色版（透明 PNG）</div>
+          </div>
+          <div>
+            <div class="lightbg"><img src="shadow-shift-logo-light.png" width="140" alt="icon light"></div>
+            <div class="label">亮色版（白底 #f8fafc）</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Favicon 系列</h2>
+      <div class="card">
+        <div class="row">
+          <div class="favcell"><img src="favicon-16.png" width="16" height="16"><span class="label">16×16</span></div>
+          <div class="favcell"><img src="favicon-32.png" width="32" height="32"><span class="label">32×32</span></div>
+          <div class="favcell"><img src="favicon-48.png" width="48" height="48"><span class="label">48×48</span></div>
+          <div class="favcell"><img src="favicon-180.png" width="64" height="64"><span class="label">180×180 (Apple)</span></div>
+          <div class="favcell"><img src="favicon-32.png" width="32" height="32"><span class="label">favicon.ico (16/32/48)</span></div>
+        </div>
+        <div class="pre" style="margin-top:18px;">
+&lt;link rel="icon" type="image/x-icon" href="assets/brand/favicon.ico"&gt;
+&lt;link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png"&gt;
+&lt;link rel="apple-touch-icon" sizes="180x180" href="assets/brand/favicon-180.png"&gt;
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

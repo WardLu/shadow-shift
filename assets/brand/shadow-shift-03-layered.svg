@@ -1,0 +1,41 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="shiftGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee" />
+      <stop offset="50%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="#a855f7" />
+    </linearGradient>
+    <filter id="shiftGlow3" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3.5" result="coloredBlur" />
+      <feMerge>
+        <feMergeNode in="coloredBlur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- trailing note card (origin, WizNote) -->
+  <g opacity="0.3">
+    <rect x="22" y="58" width="52" height="40" rx="6" stroke="#3b82f6" stroke-width="2.5" fill="none" />
+    <line x1="30" y1="68" x2="60" y2="68" stroke="#3b82f6" stroke-width="2" opacity="0.6" />
+    <line x1="30" y1="76" x2="54" y2="76" stroke="#3b82f6" stroke-width="2" opacity="0.6" />
+    <line x1="30" y1="84" x2="58" y2="84" stroke="#3b82f6" stroke-width="2" opacity="0.6" />
+  </g>
+  <!-- middle note card (in transit) -->
+  <g opacity="0.55">
+    <rect x="32" y="44" width="52" height="40" rx="6" stroke="#4f46e5" stroke-width="2.5" fill="none" />
+    <line x1="40" y1="54" x2="70" y2="54" stroke="#4f46e5" stroke-width="2" opacity="0.7" />
+    <line x1="40" y1="62" x2="64" y2="62" stroke="#4f46e5" stroke-width="2" opacity="0.7" />
+    <line x1="40" y1="70" x2="68" y2="70" stroke="#4f46e5" stroke-width="2" opacity="0.7" />
+  </g>
+  <!-- lead note card (destination, Obsidian) -->
+  <rect x="42" y="30" width="52" height="40" rx="6" stroke="url(#shiftGrad3)" stroke-width="3" fill="none" filter="url(#shiftGlow3)" />
+  <line x1="50" y1="40" x2="80" y2="40" stroke="url(#shiftGrad3)" stroke-width="2.5" />
+  <line x1="50" y1="48" x2="74" y2="48" stroke="url(#shiftGrad3)" stroke-width="2.5" />
+  <line x1="50" y1="56" x2="78" y2="56" stroke="url(#shiftGrad3)" stroke-width="2.5" />
+  <!-- migration motion lines -->
+  <path d="M16 96 L 26 86" stroke="#22d3ee" stroke-width="2" opacity="0.6" stroke-linecap="round" stroke-dasharray="3 3" />
+  <path d="M96 18 L 106 8" stroke="#a855f7" stroke-width="2" opacity="0.6" stroke-linecap="round" stroke-dasharray="3 3" />
+  <!-- destination node -->
+  <circle cx="94" cy="30" r="4.5" fill="#fff" />
+  <circle cx="22" cy="96" r="3.5" fill="#fff" opacity="0.6" />
+</svg>

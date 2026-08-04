@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="380" viewBox="0 0 1200 380" role="img" aria-labelledby="heroTitle heroDesc">
+  <title id="heroTitle">影迁 Shadow Shift — 一键将 WizNote 笔记迁移到 Obsidian</title>
+  <desc id="heroDesc">暗色品牌横幅：左侧为层叠文档 Logo 与产品名，右侧为三步迁移终端命令。</desc>
+  <defs>
+    <linearGradient id="hg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="50%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+    <linearGradient id="hgText" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="55%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+    <linearGradient id="hgBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#a855f7" stop-opacity="0.6"/>
+    </linearGradient>
+    <filter id="hgGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- background -->
+  <rect width="1200" height="380" rx="26" fill="#030712"/>
+  <rect x="1.5" y="1.5" width="1197" height="377" rx="25" fill="none" stroke="#1e293b" stroke-width="1.5"/>
+
+  <!-- LEFT: logo + title + value -->
+  <g transform="translate(64 52)">
+    <!-- inlined layered-doc logo (方案03), scaled to ~84px -->
+    <g transform="scale(0.70)">
+      <g opacity="0.3">
+        <rect x="22" y="58" width="52" height="40" rx="6" stroke="#3b82f6" stroke-width="2.5" fill="none"/>
+        <line x1="30" y1="68" x2="60" y2="68" stroke="#3b82f6" stroke-width="2" opacity="0.6"/>
+        <line x1="30" y1="76" x2="54" y2="76" stroke="#3b82f6" stroke-width="2" opacity="0.6"/>
+        <line x1="30" y1="84" x2="58" y2="84" stroke="#3b82f6" stroke-width="2" opacity="0.6"/>
+      </g>
+      <g opacity="0.55">
+        <rect x="32" y="44" width="52" height="40" rx="6" stroke="#4f46e5" stroke-width="2.5" fill="none"/>
+        <line x1="40" y1="54" x2="70" y2="54" stroke="#4f46e5" stroke-width="2" opacity="0.7"/>
+        <line x1="40" y1="62" x2="64" y2="62" stroke="#4f46e5" stroke-width="2" opacity="0.7"/>
+        <line x1="40" y1="70" x2="68" y2="70" stroke="#4f46e5" stroke-width="2" opacity="0.7"/>
+      </g>
+      <rect x="42" y="30" width="52" height="40" rx="6" stroke="url(#hg)" stroke-width="3" fill="none" filter="url(#hgGlow)"/>
+      <line x1="50" y1="40" x2="80" y2="40" stroke="url(#hg)" stroke-width="2.5"/>
+      <line x1="50" y1="48" x2="74" y2="48" stroke="url(#hg)" stroke-width="2.5"/>
+      <line x1="50" y1="56" x2="78" y2="56" stroke="url(#hg)" stroke-width="2.5"/>
+      <circle cx="94" cy="30" r="4.5" fill="#fff"/>
+    </g>
+
+    <!-- title -->
+    <text x="0" y="150" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Segoe UI',sans-serif" font-size="60" font-weight="700" fill="url(#hgText)" letter-spacing="3">影迁</text>
+    <text x="132" y="150" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="60" font-weight="700" fill="#e2e8f0" letter-spacing="1">Shadow Shift</text>
+
+    <!-- subtitle / value -->
+    <text x="2" y="186" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif" font-size="23" font-weight="500" fill="#cbd5e1">一键将 WizNote 笔记迁移到 Obsidian</text>
+    <text x="2" y="214" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif" font-size="18" font-weight="400" fill="#64748b">保留笔记 · 图片 · 附件 · WikiLinks 内部链接 · 协作笔记</text>
+
+    <!-- meta badges -->
+    <g transform="translate(2 250)" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" font-weight="600">
+      <g><rect x="0" y="0" width="74" height="28" rx="8" fill="#0f172a" stroke="#1e293b"/><text x="37" y="19" text-anchor="middle" fill="#94a3b8">MIT</text></g>
+      <g transform="translate(86 0)"><rect width="120" height="28" rx="8" fill="#0f172a" stroke="#1e293b"/><text x="60" y="19" text-anchor="middle" fill="#94a3b8">Python 3.6+</text></g>
+      <g transform="translate(216 0)"><rect width="86" height="28" rx="8" fill="#0f172a" stroke="#1e293b"/><text x="43" y="19" text-anchor="middle" fill="#94a3b8">v1.2.1</text></g>
+      <g transform="translate(312 0)"><rect width="150" height="28" rx="8" fill="#0f172a" stroke="url(#hgBorder)"/><text x="75" y="19" text-anchor="middle" fill="url(#hgText)">CLI + 桌面应用</text></g>
+    </g>
+  </g>
+
+  <!-- RIGHT: terminal proof -->
+  <g transform="translate(740 64)">
+    <rect x="0" y="0" width="396" height="252" rx="16" fill="#0b1120" stroke="url(#hgBorder)" stroke-width="1.5"/>
+    <!-- title bar -->
+    <rect x="0" y="0" width="396" height="38" rx="16" fill="#0f172a"/>
+    <rect x="0" y="22" width="396" height="16" fill="#0f172a"/>
+    <circle cx="22" cy="19" r="6" fill="#ef4444" opacity="0.8"/>
+    <circle cx="42" cy="19" r="6" fill="#eab308" opacity="0.8"/>
+    <circle cx="62" cy="19" r="6" fill="#22c55e" opacity="0.8"/>
+    <text x="198" y="24" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="14" fill="#475569">3 步完成迁移</text>
+
+    <!-- commands -->
+    <g font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="17">
+      <text x="22" y="86" fill="#a855f7">$</text>
+      <text x="44" y="86" fill="#e2e8f0">python3 tools/</text>
+      <text x="44" y="108" fill="#22d3ee">wiznote_downloader.py</text>
+
+      <text x="22" y="146" fill="#a855f7">$</text>
+      <text x="44" y="146" fill="#e2e8f0">python3 tools/</text>
+      <text x="44" y="168" fill="#22d3ee">obsidian_formatter.py</text>
+
+      <text x="22" y="206" fill="#64748b">#</text>
+      <text x="44" y="206" fill="#64748b">在 Obsidian 打开 wiznote_obsidian/</text>
+    </g>
+
+    <!-- migration arrow motif -->
+    <path d="M340 86 Q 360 126 340 166" stroke="url(#hg)" stroke-width="2" fill="none" opacity="0.5" stroke-dasharray="3 4"/>
+  </g>
+</svg>

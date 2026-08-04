@@ -1,0 +1,29 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="shiftGrad2" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#22d3ee" />
+      <stop offset="50%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="#a855f7" />
+    </linearGradient>
+    <filter id="shiftGlow2" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+      <feMerge>
+        <feMergeNode in="coloredBlur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- ghost shadow layers -->
+  <g opacity="0.25">
+    <path d="M30 80 C 18 80, 18 42, 46 42 C 72 42, 72 78, 60 78 L 60 30 C 60 20, 92 20, 92 44 L 100 44" stroke="#3b82f6" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none" transform="translate(6,6)" />
+  </g>
+  <!-- migration S-curve terminating in arrowhead -->
+  <path d="M30 80 C 18 80, 18 42, 46 42 C 72 42, 72 78, 60 78 L 60 30 C 60 20, 92 20, 92 44 L 100 44" stroke="url(#shiftGrad2)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none" filter="url(#shiftGlow2)" />
+  <!-- arrowhead at terminal: forward migration -->
+  <path d="M92 36 L 102 44 L 92 52" stroke="url(#shiftGrad2)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none" filter="url(#shiftGlow2)" />
+  <!-- origin node -->
+  <circle cx="30" cy="80" r="5" fill="#fff" />
+  <!-- accent scan lines -->
+  <path d="M14 92 L 34 92" stroke="#22d3ee" stroke-width="2" opacity="0.5" stroke-dasharray="2 4" />
+  <path d="M86 14 L 106 14" stroke="#a855f7" stroke-width="2" opacity="0.5" stroke-dasharray="2 4" />
+</svg>

@@ -1,0 +1,38 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="shiftGrad5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee" />
+      <stop offset="50%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="#a855f7" />
+    </linearGradient>
+    <linearGradient id="shiftGrad5b" x1="100%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#22d3ee" />
+      <stop offset="50%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="#a855f7" />
+    </linearGradient>
+    <filter id="shiftGlow5" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+      <feMerge>
+        <feMergeNode in="coloredBlur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- ghost shadow of the loop -->
+  <g opacity="0.25">
+    <path d="M30 50 C 18 50, 18 78, 42 78 C 60 78, 60 50, 78 50 C 102 50, 102 78, 90 78" stroke="#3b82f6" stroke-width="11" stroke-linecap="round" fill="none" transform="translate(5,5)" />
+  </g>
+  <!-- upper migrating arc: source -> destination -->
+  <path d="M30 50 C 18 50, 18 78, 42 78 C 60 78, 60 50, 78 50" stroke="url(#shiftGrad5)" stroke-width="11" stroke-linecap="round" fill="none" filter="url(#shiftGlow5)" />
+  <!-- lower returning arc: destination -> source (sync back) -->
+  <path d="M78 50 C 102 50, 102 78, 90 78 C 72 78, 72 50, 54 50" stroke="url(#shiftGrad5b)" stroke-width="11" stroke-linecap="round" fill="none" filter="url(#shiftGlow5)" />
+  <!-- flow arrowheads on both ends -->
+  <path d="M22 44 L 30 50 L 22 56" stroke="#22d3ee" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" filter="url(#shiftGlow5)" />
+  <path d="M98 84 L 90 78 L 98 72" stroke="#a855f7" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" filter="url(#shiftGlow5)" />
+  <!-- sync nodes -->
+  <circle cx="42" cy="78" r="4.5" fill="#fff" />
+  <circle cx="78" cy="50" r="4.5" fill="#fff" />
+  <!-- accent pulse lines -->
+  <path d="M12 96 L 28 96" stroke="#22d3ee" stroke-width="2" opacity="0.5" stroke-dasharray="3 3" />
+  <path d="M92 18 L 108 18" stroke="#a855f7" stroke-width="2" opacity="0.5" stroke-dasharray="3 3" />
+</svg>

@@ -1,0 +1,33 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="shiftGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee" />
+      <stop offset="50%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="#a855f7" />
+    </linearGradient>
+    <filter id="shiftGlow1" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+      <feMerge>
+        <feMergeNode in="coloredBlur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- 影: shifted ghost shadow layer (the "shadow" that has migrated) -->
+  <g opacity="0.28">
+    <path d="M47 75 C 32 75, 32 35, 62 35 C 92 35, 92 75, 77 75 L 77 35 C 77 25, 102 25, 102 50" stroke="#4f46e5" stroke-width="12" stroke-linecap="round" fill="none" />
+  </g>
+  <g opacity="0.18">
+    <path d="M41 75 C 26 75, 26 35, 56 35 C 86 35, 86 75, 71 75 L 71 35 C 71 25, 96 25, 96 50" stroke="#3b82f6" stroke-width="12" stroke-linecap="round" fill="none" />
+  </g>
+  <!-- 迁: main S-curve in brand gradient -->
+  <path d="M35 75 C 20 75, 20 35, 50 35 C 80 35, 80 75, 65 75 L 65 35 C 65 25, 90 25, 90 50" stroke="url(#shiftGrad1)" stroke-width="12" stroke-linecap="round" fill="none" filter="url(#shiftGlow1)" />
+  <!-- shift direction indicator nodes -->
+  <circle cx="35" cy="75" r="5" fill="#fff" />
+  <circle cx="90" cy="50" r="5" fill="#fff" />
+  <!-- migration accent dashes -->
+  <path d="M20 95 L 38 95" stroke="#22d3ee" stroke-width="2" opacity="0.5" stroke-dasharray="3 3" />
+  <path d="M82 18 L 104 18" stroke="#a855f7" stroke-width="2" opacity="0.5" stroke-dasharray="3 3" />
+  <!-- shift arrow accent -->
+  <path d="M96 44 L 104 50 L 96 56" stroke="#a855f7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+</svg>

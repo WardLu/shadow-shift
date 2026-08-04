@@ -1,0 +1,41 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="shiftGrad4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee" />
+      <stop offset="50%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="#a855f7" />
+    </linearGradient>
+    <radialGradient id="portalCore4" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.35" />
+      <stop offset="70%" stop-color="#818cf8" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#a855f7" stop-opacity="0" />
+    </radialGradient>
+    <filter id="shiftGlow4" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+      <feMerge>
+        <feMergeNode in="coloredBlur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- portal aura -->
+  <circle cx="60" cy="60" r="40" fill="url(#portalCore4)" />
+  <!-- ghost portal ring -->
+  <circle cx="60" cy="60" r="34" stroke="#4f46e5" stroke-width="3" fill="none" opacity="0.25" stroke-dasharray="4 5" />
+  <!-- main portal ring (destination realm) -->
+  <circle cx="60" cy="60" r="34" stroke="url(#shiftGrad4)" stroke-width="2.5" fill="none" filter="url(#shiftGlow4)" stroke-dasharray="6 4" />
+  <!-- migration S-path threading through portal -->
+  <g opacity="0.3">
+    <path d="M22 80 C 10 80, 10 44, 38 44 C 66 44, 66 76, 54 76" stroke="#3b82f6" stroke-width="9" stroke-linecap="round" fill="none" transform="translate(5,5)" />
+  </g>
+  <path d="M22 80 C 10 80, 10 44, 38 44 C 66 44, 66 76, 54 76 L 54 30 C 54 20, 86 20, 86 46" stroke="url(#shiftGrad4)" stroke-width="9" stroke-linecap="round" fill="none" filter="url(#shiftGlow4)" />
+  <!-- traveler node passing through portal -->
+  <circle cx="60" cy="60" r="6" fill="#fff" filter="url(#shiftGlow4)" />
+  <circle cx="60" cy="60" r="3" fill="#22d3ee" />
+  <!-- origin & destination nodes -->
+  <circle cx="22" cy="80" r="4.5" fill="#fff" />
+  <circle cx="86" cy="46" r="4.5" fill="#fff" />
+  <!-- accent scan ticks -->
+  <path d="M14 96 L 24 96" stroke="#22d3ee" stroke-width="2" opacity="0.5" />
+  <path d="M96 14 L 106 14" stroke="#a855f7" stroke-width="2" opacity="0.5" />
+</svg>

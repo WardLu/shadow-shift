@@ -42,7 +42,7 @@ jobs:
             done <<< "$changed_migrations"
           fi
 
-          if git diff --unified=0 "$BASE_SHA" "$HEAD_SHA" | grep -nE 'supabase db push|supabase migration repair|supabase db reset --linked|SUPABASE_DB_PASSWORD|SUPABASE_ACCESS_TOKEN'; then
+          if git diff --unified=0 "$BASE_SHA" "$HEAD_SHA" -- . ':(exclude).github/workflows/shared-supabase-policy.yml' | grep -nE 'supabase db push|supabase migration repair|supabase db reset --linked|SUPABASE_DB_PASSWORD|SUPABASE_ACCESS_TOKEN'; then
             echo "Direct production migration or migration-repair commands are forbidden in product repositories."
             exit 1
           fi

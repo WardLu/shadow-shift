@@ -1,0 +1,18 @@
+name: Shared Supabase Policy
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  shared-supabase-policy:
+    uses: WardLu/shadow-portal/.github/workflows/reusable-supabase-policy.yml@main
+    with:
+      repository-mode: proposal-only
+      migration-path: supabase/migrations

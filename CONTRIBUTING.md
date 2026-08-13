@@ -8,7 +8,7 @@
 
 如果你发现了 bug 或有功能建议：
 
-1. 检查 [Issues](https://github.com/WardLu/wiznote-to-obsidian/issues) 是否已有类似问题
+1. 检查 [Issues](https://github.com/WardLu/shadow-shift/issues) 是否已有类似问题
 2. 如果没有，创建新的 Issue，包含：
    - 清晰的标题
    - 详细的问题描述
@@ -27,8 +27,8 @@
 #### 2. 克隆你的 Fork
 
 ```bash
-git clone https://github.com/WardLu/wiznote-to-obsidian.git
-cd wiznote-to-obsidian
+git clone https://github.com/WardLu/shadow-shift.git
+cd shadow-shift
 ```
 
 #### 3. 创建特性分支
@@ -237,7 +237,7 @@ def fix_markdown(file_path: str) -> bool:
 ## 📧 联系方式
 
 如有问题：
-- 在 [GitHub Issues](https://github.com/WardLu/wiznote-to-obsidian/issues) 中提问
+- 在 [GitHub Issues](https://github.com/WardLu/shadow-shift/issues) 中提问
 - GitHub: [@WardLu](https://github.com/WardLu)
 
 ## 🌟 贡献者

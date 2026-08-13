@@ -31,8 +31,8 @@
 
 ```bash
 # 1. 克隆
-git clone https://github.com/WardLu/wiznote-to-obsidian.git
-cd wiznote-to-obsidian
+git clone https://github.com/WardLu/shadow-shift.git
+cd shadow-shift
 pip3 install -r requirements.txt        # 仅在线下载需要
 
 # 2. 下载笔记（输入 WizNote 账号密码）
@@ -152,7 +152,7 @@ export WIZNOTE_SOURCE_DIR=~/wiznote_export
 本项目采用 **开源工具 + 商业应用** 双轨架构：
 
 - **开源部分**：本仓库 `tools/` 目录，命令行工具，完全免费（MIT）。
-- **商业部分**：`app/` 目录（Git Submodule [`shadow-shift`](https://github.com/WardLu/shadow-shift)），图形界面桌面应用。
+- **商业部分**：`app/` 目录（Git Submodule [`shadow-shift-app`](https://github.com/WardLu/shadow-shift-app)），图形界面桌面应用。
 
 | 你的身份 | 推荐 |
 | --- | --- |
@@ -161,7 +161,7 @@ export WIZNOTE_SOURCE_DIR=~/wiznote_export
 
 ## 贡献
 
-欢迎贡献代码、报告问题或提出建议 —— 提交 [GitHub Issue](https://github.com/WardLu/wiznote-to-obsidian/issues)。
+欢迎贡献代码、报告问题或提出建议 —— 提交 [GitHub Issue](https://github.com/WardLu/shadow-shift/issues)。
 
 ## 许可证
 

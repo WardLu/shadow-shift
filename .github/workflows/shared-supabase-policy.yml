@@ -25,7 +25,8 @@ jobs:
       - name: Check migration policy
         shell: bash
         env:
-          MIGRATION_PATH: supabase/migrations
+          # Shadow Shift 的 Supabase 迁移位于 app 私有子模块；子模块自身也有同名门禁。
+          MIGRATION_PATH: app/supabase/migrations
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
         run: |
@@ -33,16 +34,12 @@ jobs:
 
           changed_migrations="$(git diff --name-status "$BASE_SHA" "$HEAD_SHA" -- "$MIGRATION_PATH" || true)"
           if [[ -n "$changed_migrations" ]]; then
-            while IFS=$'\t' read -r status file _; do
-              [[ -z "$file" ]] && continue
-              case "$status" in
-                A) ;;
-                *) echo "Existing migration history is immutable: $file"; exit 1 ;;
-              esac
-            done <<< "$changed_migrations"
+            echo "Product repositories may not add or modify executable files under ${MIGRATION_PATH}."
+            echo "$changed_migrations"
+            exit 1
           fi
 
-          if git diff --unified=0 "$BASE_SHA" "$HEAD_SHA" -- . ':(exclude).github/workflows/shared-supabase-policy.yml' | grep -nE 'supabase db push|supabase migration repair|supabase db reset --linked|SUPABASE_DB_PASSWORD|SUPABASE_ACCESS_TOKEN'; then
+          if git diff --unified=0 "$BASE_SHA" "$HEAD_SHA" -- . ':(exclude).github/workflows/shared-supabase-policy.yml' | grep -nE 'supabase db push|supabase db query --linked|supabase migration repair|supabase db reset --linked|SUPABASE_DB_PASSWORD|SUPABASE_ACCESS_TOKEN'; then
             echo "Direct production migration or migration-repair commands are forbidden in product repositories."
             exit 1
           fi

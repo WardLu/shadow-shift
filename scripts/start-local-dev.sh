@@ -12,4 +12,4 @@ if [[ ! -f "$RUNTIME_ROOT/scripts/local-dev/cli.mjs" ]]; then
 fi
 
 cd "$RUNTIME_ROOT"
-exec node scripts/local-dev/cli.mjs "$@"
+LOCAL_DEV_ENTRY_PROJECT=shadow-shift exec node scripts/local-dev/cli.mjs "$@"

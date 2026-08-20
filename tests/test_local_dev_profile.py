@@ -19,3 +19,11 @@ def test_shadow_shift_profile_does_not_claim_shared_schema_or_edge_runtime():
     assert PROFILE["schema_overlays"] == []
     assert PROFILE["edge_functions"] == []
     assert PROFILE["optional_features"] == ["shadow-shift-cli", "shadow-shift-app"]
+
+
+def test_shadow_shift_entrypoint_delegates_to_central_runtime():
+    script = (ROOT / "scripts" / "start-local-dev.sh").read_text()
+    assert "scripts/local-dev/cli.mjs" in script
+    assert "supabase start" not in script
+    assert "functions serve" not in script
+    assert "cloudflared" not in script

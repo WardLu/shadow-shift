@@ -1,0 +1,15 @@
+{
+  "profile_schema_version": 1,
+  "project_id": "shadow-shift",
+  "display_name": "Shadow Shift",
+  "requires": [],
+  "schema_overlays": [],
+  "edge_functions": [],
+  "processes": [],
+  "optional_features": [
+    "shadow-shift-cli",
+    "shadow-shift-app"
+  ],
+  "ingress_claims": [],
+  "health_checks": []
+}

@@ -11,7 +11,7 @@
 
 > **影迁 Shadow Shift** —— 一键将 WizNote 笔记迁移到 Obsidian，保留笔记、图片、附件与 WikiLinks 内部链接。
 >
-> 📖 [快速参考指南](QUICK_REFERENCE.md) · 📚 [文档索引](DOCUMENTATION_INDEX.md) · 📝 [更新日志](CHANGELOG.md)
+> 📖 [快速参考指南](QUICK_REFERENCE.md) · 📚 [文档索引](DOCUMENTATION_INDEX.md) · 📝 [更新日志](CHANGELOG.md) · 🌐 [Shadow Lab 官网](https://shadow.wang/zh/products/shadow-shift)
 
 ---
 

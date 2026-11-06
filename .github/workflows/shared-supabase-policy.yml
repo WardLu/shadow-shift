@@ -39,7 +39,7 @@ jobs:
             exit 1
           fi
 
-          # Forbidden-command rule: shadow-devkit templates/ci/shared-supabase-policy.mjs, copied to scripts/ci/; the local equivalent gate runs the same script.
+          # Forbidden-command rule: shadow-devkit templates/ci/shared-supabase-policy.mjs, copied to scripts/ci/. This repository has no local equivalent gate yet, so the rule runs only when hosted CI runs.
           node scripts/ci/shared-supabase-policy.mjs --base "$BASE_SHA" --head "$HEAD_SHA"
 
           echo "Shared Supabase policy passed (local private-repository adapter)."
